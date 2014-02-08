@@ -1,0 +1,20 @@
+<h1>Users#show</h1>
+<p>Find me in app/views/users/show.html.erb</p>
+
+<h2>Repos</h2>
+
+<ul>
+  <% current_user.repos.each do |repo| %>
+    <li>
+    <%= repo.name %>
+    <ul>
+      <% collaborators = repo.rels[:collaborators].get %>
+      <% collaborators.data.each do |colab| %>
+        <li>
+        <%= colab.login %>
+        </li>
+      <% end %>
+    </ul>
+    </li>
+  <% end %>
+</ul>
