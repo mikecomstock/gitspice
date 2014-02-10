@@ -1,10 +1,10 @@
 GitSpice::Application.routes.draw do
 
-  get "main/welcome"
+  get 'main/welcome'
   get '/auth/:provider/callback', to: 'sessions#create'
-  get "/signout" => "sessions#destroy", :as => :signout
+  get '/signout' => 'sessions#destroy', :as => :signout
 
-  resources :users
+  get ':login' => 'users#show', :as => 'user'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

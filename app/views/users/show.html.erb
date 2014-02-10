@@ -6,7 +6,10 @@
 <ul>
   <% current_user.repos.each do |repo| %>
     <li>
-    <%= repo.name %>
+    <%= repo.full_name %>
+    <small><%= repo.description %></small>
+    <br>
+    <%= debug repo %>
     <ul>
       <% collaborators = repo.rels[:collaborators].get %>
       <% collaborators.data.each do |colab| %>

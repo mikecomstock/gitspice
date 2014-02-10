@@ -2,6 +2,10 @@ class User < ActiveRecord::Base
 
   serialize :info
 
+  def to_param
+    name
+  end
+
   def self.create_with_omniauth(auth)
     puts 'create_with_omniauth'
     create! do |user|
@@ -15,12 +19,23 @@ class User < ActiveRecord::Base
     self.oauth_token = auth['credentials']['token']
     self.name = auth['info']['nickname']
     self.info = auth
-    self.save!
+    self.save
+    update_repositories
   end
 
   def repos
     client = Octokit::Client.new :access_token => self.oauth_token
     client.repos
+  end
+
+  # This takes a while, should do it in the background instead.
+  def update_repositories
+    client = Octokit::Client.new :access_token => self.oauth_token
+    client.repos.each do |repo|
+      r = Repository.find_or_initialize_by full_name: repo.full_name
+      r.update info: repo
+      r.save
+    end
   end
 
 end
