@@ -44,6 +44,7 @@ end
 
 # Use debugger
 gem 'debugger', group: [:development, :test]
+gem 'meta_request', group: [:development] # For RailsPanel Chrome extension
 
 gem 'octokit'
 gem 'omniauth-github'
