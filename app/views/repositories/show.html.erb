@@ -1,0 +1,31 @@
+<h1><%= @repo.name %></h1>
+<h2><%= @repo.full_name %></h2>
+<%= debug @repo %>
+
+<h3>Branches</h3>
+<ul>
+  <% @branches.each do |branch| %>
+    <li>
+    <%= branch.name %>
+    </li>
+  <% end %>
+</ul>
+
+<h3>Tree</h3>
+<ul>
+  <% @contents.each do |content| %>
+    <li>
+    <%= link_to content.attrs[:name], contents_path(:login => @repo.owner.login, :repo => @repo.name, :content_path => content.attrs[:path]) %>
+    </li>
+  <% end %>
+</ul>
+
+<h3>Debug</h3>
+<%= debug @contents %>
+
+<% if defined? @contents.content %>
+<h3>Content</h3>
+<pre>
+<%= Base64.decode64 @contents.content %>
+</pre>
+<% end %>

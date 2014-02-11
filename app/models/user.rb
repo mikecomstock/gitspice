@@ -2,20 +2,21 @@ class User < ActiveRecord::Base
 
   serialize :info
 
+  has_many :collaborations
+
   def to_param
     name
   end
 
   def self.create_with_omniauth(auth)
-    puts 'create_with_omniauth'
     create! do |user|
       user.provider = auth["provider"]
+      user.id = auth["uid"]
       user.uid = auth["uid"]
     end
   end
 
   def update_from_omniauth_github!(auth)
-    puts 'update_from_omniauth'
     self.oauth_token = auth['credentials']['token']
     self.name = auth['info']['nickname']
     self.info = auth
@@ -31,10 +32,31 @@ class User < ActiveRecord::Base
   # This takes a while, should do it in the background instead.
   def update_repositories
     client = Octokit::Client.new :access_token => self.oauth_token
-    client.repos.each do |repo|
-      r = Repository.find_or_initialize_by full_name: repo.full_name
-      r.update info: repo
-      r.save
+    repos = client.repos
+    repos.each do |repo|
+      r = Repository.find_or_initialize_by id: repo.id
+      r.update full_name: repo.full_name, info: repo
+      r.save!
+
+      # No callbacks here, since I'm using delete_all
+      # TODO: This sets the repo to null in the db, rather than deleting the row. Need to fix...
+      #r.collaborations.delete_all
+
+      #user = self
+
+      #r.collaborators.delete_all
+
+      #collaborators = repo.rels[:collaborators].get
+      #collaborators.data.each do |collaborator|
+        #u = User.find_or_initialize_by id: collaborator.id
+        #u.name = collaborator.login
+        #u.save!
+        #r.collaborations.create! do |collaboration|
+          #collaboration.user_id = u.id
+        #end
+      #end
+
+
     end
   end
 

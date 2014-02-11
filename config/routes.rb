@@ -4,6 +4,8 @@ GitSpice::Application.routes.draw do
   get '/auth/:provider/callback', to: 'sessions#create'
   get '/signout' => 'sessions#destroy', :as => :signout
 
+  get ':login/:repo/*content_path' => 'repositories#show', :as => 'contents', :format => false
+  get ':login/:repo' => 'repositories#show', :as => 'repository'
   get ':login' => 'users#show', :as => 'user'
 
   # The priority is based upon order of creation: first created -> highest priority.
