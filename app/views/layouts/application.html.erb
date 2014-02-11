@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>GitSpice</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
@@ -8,16 +8,24 @@
 </head>
 <body>
 
-<div>
-  <% if current_user %>
-    Welcome <%= link_to current_user.name, user_path(current_user) %>!
-    <%= link_to "Sign Out", signout_path %>
-  <% else %>
-    <%= link_to "Sign in with GitHub", "/auth/github" %>
-  <% end %>
+<div class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <div class="navbar-brand">
+        <% if current_user %>
+          Welcome <%= link_to current_user.name, user_path(current_user) %>!
+          <%= link_to "Sign Out", signout_path %>
+        <% else %>
+          <%= link_to "Sign in with GitHub", "/auth/github" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
 
-<%= yield %>
+<div class="container">
+  <%= yield %>
+</div>
 
 </body>
 </html>

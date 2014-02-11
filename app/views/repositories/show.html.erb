@@ -1,9 +1,7 @@
-<h1><%= @repo.name %></h1>
-<h2><%= @repo.full_name %></h2>
-<%= debug @repo %>
+<h1><%= @repo.full_name %></h1>
 
 <h3>Branches</h3>
-<ul>
+<ul class="list-inline">
   <% @branches.each do |branch| %>
     <li>
     <%= branch.name %>
@@ -11,21 +9,23 @@
   <% end %>
 </ul>
 
-<h3>Tree</h3>
-<ul>
-  <% @contents.each do |content| %>
-    <li>
-    <%= link_to content.attrs[:name], contents_path(:login => @repo.owner.login, :repo => @repo.name, :content_path => content.attrs[:path]) %>
-    </li>
+<% if @contents.class == Array # It's a tree %>
+  <h3><%= params[:content_path] %></h3>
+  <div class="list-group">
+    <% @contents.each do |content| %>
+      <%= link_to content.attrs[:name], contents_path(:login => @repo.owner.login, :repo => @repo.name, :content_path => content.attrs[:path]), :class => 'list-group-item' %>
+    <% end %>
+  </div>
+<% end %>
+
+<% if defined? @contents.type %>
+  <% case @contents.type
+     when 'file' %>
+    <h3><%= @contents.name %></h3>
+    <pre><%= Base64.decode64 @contents.content %></pre>
+  <% when 'symlink' %>
+    <p>Sorry, symlinks are not yet handled!</p>
+  <% when 'submodule' %>
+    <p>Sorry, submodules are not yet handled!</p>
   <% end %>
-</ul>
-
-<h3>Debug</h3>
-<%= debug @contents %>
-
-<% if defined? @contents.content %>
-<h3>Content</h3>
-<pre>
-<%= Base64.decode64 @contents.content %>
-</pre>
 <% end %>
