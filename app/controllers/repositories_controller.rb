@@ -6,7 +6,9 @@ class RepositoriesController < ApplicationController
     #@tree = @client.tree full_name, @repo.default_branch
     #TODO: sort contents
     @contents = @client.contents full_name, :path => params[:content_path]
-    @branches = @client.branches full_name
+    @commits = @client.commits full_name, { :path => params[:content_path] }
+    @branches = []# @client.branches full_name
+
     #debugger
   end
 end

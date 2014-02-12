@@ -22,7 +22,27 @@
   <% case @contents.type
      when 'file' %>
     <h3><%= @contents.name %></h3>
+    <pre>SHA: <%= @contents.sha %></pre>
+    <pre>PATH: <%= @contents.path %></pre>
     <pre><%= Base64.decode64 @contents.content %></pre>
+    <pre><%= debug @contents %></pre>
+
+    <h3>Commits</h3>
+    <ul class="list-group">
+      <% @commits.each do |commit| %>
+        <li class="list-group-item">
+          <img src="<%= "https://secure.gravatar.com/avatar/#{commit.committer.attrs[:gravatar_id]}?s=36&r=x" %>" class="img-rounded pull-left" />
+          <%= commit.attrs[:commit].message %>
+          <br/>
+          Date: <%= commit.attrs[:commit].attrs[:committer].attrs[:date] %>
+          <br/>
+          User: <%= commit.committer.attrs[:login] %>
+          <br/>
+        </li>
+      <% end %>
+    </ul>
+
+
   <% when 'symlink' %>
     <p>Sorry, symlinks are not yet handled!</p>
   <% when 'submodule' %>

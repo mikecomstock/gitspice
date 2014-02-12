@@ -3,11 +3,10 @@
 
 <h2>Repos</h2>
 
-<ul>
+<ul class="list-group">
   <% current_user.repos.each do |repo| %>
-    <li>
+    <li class="list-group-item">
     <%= link_to repo.full_name, repository_path(:login => repo.owner.login, :repo => repo.name) %>
-    <%= repo.full_name %>
     <br/>
     <small><%= repo.description %></small>
     </li>

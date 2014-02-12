@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
     self.name = auth['info']['nickname']
     self.info = auth
     self.save
-    update_repositories
+    #update_repositories
   end
 
   def repos
